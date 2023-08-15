@@ -1,5 +1,5 @@
 module "web_server" {
-  source = "../modules/web_server"
+  source = "./modules/web_server"
 
   region = "us-west-2"
   public_subnet_ids = {
@@ -14,12 +14,12 @@ module "web_server" {
   my_ip          = "24.162.52.74/32"
 }
 module "network" {
-  source = "../modules/2_tier_network"
+  source = "./modules/2_tier_network"
 
   region = "us-west-2"
 }
 module "database" {
-  source = "../modules/rds_db"
+  source = "./modules/rds_db"
   region = "us-west-2"
   vpc_id = module.network.vpc_id
   db_subnet_ids = [
@@ -32,24 +32,14 @@ module "database" {
 }
 
 
-
-
-
-
-output "server_instance_type" {
-  value = module.web_server.instance_type
-}
 output "server_availability_zones" {
   value = module.web_server.instance_azs
 }
 output "server_security_groups" {
   value = module.web_server.security_groups
 }
-output "server_public_ip" {
+output "server_public_ips" {
   value = module.web_server.public_ips
-}
-output "server_ami" {
-  value = module.web_server.ami
 }
 output "lb_dns" {
   value = module.web_server.lb_dns_name
