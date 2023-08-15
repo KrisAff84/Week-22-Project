@@ -119,9 +119,9 @@ variable "publicly_accessible" {
     default     = false
 }
 variable "encrypted" {
-    description = "Whether the database is encrypted"
+    description = "Whether the database is encrypted. Note that t2.micro does not support encryption"
     type        = bool
-    default     = true
+    default     = false
 }
 
 #################################

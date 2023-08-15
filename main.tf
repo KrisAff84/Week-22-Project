@@ -50,3 +50,6 @@ output "instance_ids" {
 output "db_address" {
   value = module.database.db_address
 }
+output "db_arn" {
+  value = module.database.db_arn
+}
