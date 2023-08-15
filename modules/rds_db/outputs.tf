@@ -36,7 +36,7 @@ output "db_resource_id" {
 # Database Subnet Group
 #######################################
 
-output "db_subnet_group_name" {c
+output "db_subnet_group_name" {
   description = "The name of the database subnet group"
   value = aws_db_subnet_group.default.name
 }
