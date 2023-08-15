@@ -33,7 +33,7 @@ output "db_resource_id" {
 }
 output "db_instance_name" {
   description = "The database instance name"
-  value = aws_db_instance.default.db_instance_identifier
+  value = aws_db_instance.default.identifier
 }
 
 #######################################
