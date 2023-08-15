@@ -12,7 +12,7 @@ output "db_az" {
 }
 output "db_arn" {
   description = "The ARN of the RDS instance"
-  value = aws_db_instance.default.db_instance_arn
+  value = aws_db_instance.default.arn
 }
 output "db_port" {
   description = "The port in which the database accepts connections"
@@ -29,7 +29,7 @@ output "db_password" {
 }
 output "db_resource_id" {
   description = "The RDS Resource ID of this instance"
-  value = aws_db_instance.default.db_instance_resource_id
+  value = aws_db_instance.default.resource_id
 }
 
 #######################################
