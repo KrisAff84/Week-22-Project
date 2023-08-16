@@ -14,22 +14,3 @@ By default this module produces a single EC2 instance with appropriate security 
 * ami
 * key_name
 * my_ip
-
-# Special Considerations 
-If you are specifying subnets to deploy instances to, the subnet variables must be provided as a map. The key does not matter, but the value must be the subnet ID. 
-    e.g. 
-
-    public_subnet_ids = {
-        "subnet_1" = "subnet-0f14eefd953aa0a59",
-        "subnet_2" = "subnet-0ce005b7cd036d206"
-    }
-
-   or if you are using a network module then you need to provide module output(s) that specify the desired subnet ID(s). 
-
-    public_subnet_ids = {
-        "subnet_1" = module.network_module.subnet_id_1,
-        "subnet_2" = module.network_module.subnet_id_2
-    }
-
-   In the above examples the keys "subnet_1" and "subnet_2" do not matter. What's important is that the values are subnet IDs and the map format is correct. 
-

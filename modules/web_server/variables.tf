@@ -17,10 +17,8 @@ variable "name_prefix" {
 
 variable "public_subnet_ids" {
   description = "List of public subnet IDs to deploy instances to"
-  type        = map(string)
-  default = {
-    "" = ""
-  }
+  type        = list(string)
+  default     = [""]
 }
 variable "ami" {
   type = string
@@ -124,7 +122,7 @@ variable "lb_access_logs_enabled" {
   default     = false
 }
 variable "lb_access_logs_bucket" {
-    description = "S3 bucket name to store load balancer access logs"
-    type        = string
-    default     = ""
+  description = "S3 bucket name to store load balancer access logs"
+  type        = string
+  default     = ""
 }

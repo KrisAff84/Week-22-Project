@@ -64,7 +64,7 @@ resource "aws_subnet" "private2" {
     Name = "${var.name_prefix}-private-2"
   }
 }
-  
+
 ###########################################
 # Creates Internet Gateway 
 # and Public Route Table

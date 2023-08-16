@@ -4,19 +4,15 @@
 
 output "instance_ids" {
   description = "The ID of the EC2 instance(s)"
-  value = [
-    for instance in aws_instance.web : "${instance.id}"
-  ]
+  value       = [for instance in aws_instance.web : instance.id]
 }
 output "ami" {
   description = "The AMI used to launch the EC2 instance(s)"
-  value       = toset([for instance in aws_instance.web : instance.ami])
+  value       = aws_instance.web[0].ami
 }
 output "instance_arns" {
   description = "The ARN of the EC2 instance(s)"
-  value = [
-    for instance in aws_instance.web : "${instance.id} : ${instance.arn}"
-  ]
+  value       = [for instance in aws_instance.web : instance.arn]
 }
 output "instance_azs" {
   description = "The availability zones of the EC2 instance(s)"
@@ -32,11 +28,11 @@ output "instance_state" {
 }
 output "instance_type" {
   description = "The type of the EC2 instance(s)"
-  value       = toset([for instance in aws_instance.web : instance.instance_type])
+  value       = aws_instance.web[0].instance_type
 }
 output "key_name" {
   description = "The key name of the EC2 instance(s)"
-  value       = toset([for instance in aws_instance.web : instance.key_name])
+  value       = aws_instance.web[0].key_name
 }
 output "private_ips" {
   description = "The private IP address of the EC2 instance(s)"
@@ -56,10 +52,9 @@ output "instance_public_dns" {
     for instance in aws_instance.web : "${instance.id} : ${instance.public_dns}"
   ]
 }
-
 output "security_groups" {
   description = "The security groups associated with the EC2 instance(s)"
-  value       = toset([for instance in aws_instance.web : instance.vpc_security_group_ids])
+  value       = aws_instance.web[0].vpc_security_group_ids
 }
 output "subnet_ids" {
   description = "The subnet ID of the EC2 instance(s)"
@@ -84,15 +79,15 @@ output "lb_dns_name" {
 ###### LB Listener ######
 
 output "listener_arn" {
-    description = "The ARN of the load balancer listener"
-    value       = local.load_balancer > 0 ? aws_lb_listener.web[0].arn : null
+  description = "The ARN of the load balancer listener"
+  value       = local.load_balancer > 0 ? aws_lb_listener.web[0].arn : null
 }
 
 ##### LB Target Group #####
 
 output "target_group_arn" {
-    description = "The ARN of the load balancer target group"
-    value       = local.load_balancer > 0 ? aws_lb_target_group.web.arn : null
+  description = "The ARN of the load balancer target group"
+  value       = local.load_balancer > 0 ? aws_lb_target_group.web[0].arn : null
 }
 
 ################################
@@ -116,5 +111,5 @@ output "ssh_access_sg_id" {
 
 output "lb_access_sg_id" {
   description = "The ID of the load balancer access security group"
-  value       = local.load_balancer > 0 ? aws_security_group.lb_access.id : null
+  value       = local.load_balancer > 0 ? aws_security_group.lb_access[0].id : null
 }
