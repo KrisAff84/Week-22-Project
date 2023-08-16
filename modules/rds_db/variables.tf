@@ -109,19 +109,19 @@ variable "max_storage" {
   default     = 0
 }
 variable "open_port" {
-    description = "The port in which the database accepts connections"
-    type        = number
-    default     = 3306
+  description = "The port in which the database accepts connections"
+  type        = number
+  default     = 3306
 }
 variable "publicly_accessible" {
-    description = "Whether the database is publicly accessible"
-    type        = bool
-    default     = false
+  description = "Whether the database is publicly accessible"
+  type        = bool
+  default     = false
 }
 variable "encrypted" {
-    description = "Whether the database is encrypted. Note that t2.micro does not support encryption"
-    type        = bool
-    default     = false
+  description = "Whether the database is encrypted. Note that t2.micro does not support encryption"
+  type        = bool
+  default     = false
 }
 
 #################################

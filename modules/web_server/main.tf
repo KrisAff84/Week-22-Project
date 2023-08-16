@@ -33,8 +33,8 @@ data "aws_subnets" "public" {
 #####################################
 
 locals {
-  public_subnet_ids = var.public_subnet_ids != { "" = "" } ? var.public_subnet_ids : { "public_subnet_1" = data.aws_subnets.public.ids[0] }
-  vpc_id            = var.vpc_id != "" ? var.vpc_id : data.aws_vpc.default.id
+  public_subnet_ids = var.public_subnet_ids != [""] ? var.public_subnet_ids : [data.aws_subnets.public.ids[0]]
+  vpc_id            = var.vpc_id != "" ? var.vpc_id : (data.aws_vpc.default.id)
   load_balancer     = length(var.public_subnet_ids) > 1 ? 1 : 0
   default_user_data = <<-EOF
 #!/bin/bash
@@ -53,18 +53,18 @@ EOF
 
 
 resource "aws_instance" "web" {
-  for_each      = local.public_subnet_ids
+  count         = length(local.public_subnet_ids)
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = var.key_name
   vpc_security_group_ids = [
     aws_security_group.ssh_access.id,
-    local.load_balancer > 0 ? aws_security_group.lb_access.id : aws_security_group.web_access.id
+    local.load_balancer > 0 ? aws_security_group.lb_access[0].id : aws_security_group.web_access.id
   ]
   user_data = var.user_data_file != "" ? file(var.user_data_file) : local.default_user_data
-  subnet_id = each.value
+  subnet_id = local.public_subnet_ids[count.index]
   tags = {
-    Name = "${var.name_prefix}_web_server_${index(keys(local.public_subnet_ids), each.key) + 1}"
+    Name = "${var.name_prefix}_web_server_${count.index + 1}"
   }
   associate_public_ip_address = true
 }
@@ -120,6 +120,7 @@ resource "aws_security_group" "ssh_access" {
 ##### Load Balancer Access #####
 
 resource "aws_security_group" "lb_access" {
+  count       = local.load_balancer
   name        = "${var.name_prefix}_lb_access_sg"
   description = "Allow HTTP and HTTPS traffic"
   vpc_id      = local.vpc_id
@@ -147,7 +148,7 @@ resource "aws_lb" "web" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.web_access.id]
-  subnets            = values(local.public_subnet_ids)
+  subnets            = local.public_subnet_ids
   access_logs {
     bucket  = var.lb_access_logs_bucket
     enabled = var.lb_access_logs_enabled
@@ -166,13 +167,14 @@ resource "aws_lb_listener" "web" {
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.web.arn
+    target_group_arn = aws_lb_target_group.web[0].arn
   }
 }
 
 ############### Target Group #####################
 
 resource "aws_lb_target_group" "web" {
+  count    = local.load_balancer
   name     = "${var.name_prefix}-asg-lb-tg"
   port     = 80
   protocol = "HTTP"
@@ -180,8 +182,8 @@ resource "aws_lb_target_group" "web" {
 }
 
 resource "aws_lb_target_group_attachment" "lb_tg_attachment" {
-  for_each         = aws_instance.web
-  target_group_arn = aws_lb_target_group.web.arn
-  target_id        = each.value.id
+  count            = local.load_balancer > 0 ? length(aws_instance.web) : 0
+  target_group_arn = aws_lb_target_group.web[0].arn
+  target_id        = aws_instance.web[count.index].id
   port             = 80
 }
