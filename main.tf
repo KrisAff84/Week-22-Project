@@ -8,10 +8,10 @@ module "web_server" {
 
   region            = local.region
   name_prefix       = local.name_prefix
-  ami               = "ami-0c65adc9a5c1b5d7c"
+  ami               = "ami-03f65b8614a860c29"
   instance_type     = "t2.micro"
   key_name          = "kriskey"
-  # user_data_file    = "nginx_debian.sh"
+  user_data_file    = "nginx_debian.sh"
   vpc_id            = module.network.vpc_id
   public_subnet_ids = [
     module.network.public_subnet1_id, 
