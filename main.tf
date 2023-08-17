@@ -10,14 +10,14 @@ module "web_server" {
   name_prefix       = local.name_prefix
   ami               = "ami-03f65b8614a860c29"
   instance_type     = "t2.micro"
-  key_name          = "kriskey"
+  # key_name          = "kriskey"
   user_data_file    = "nginx_debian.sh"
   vpc_id            = module.network.vpc_id
   public_subnet_ids = [
     module.network.public_subnet1_id, 
     module.network.public_subnet2_id
   ]
-  my_ip             = "24.162.52.74/32"
+  # my_ip             = "24.162.52.74/32"
 }
 
 module "network" {
@@ -36,7 +36,7 @@ module "database" {
     module.network.private_subnet1_id,
     module.network.private_subnet2_id
   ]
-  username            = "kris"
+  username            = "username"
   password            = var.secret_password
   db_access_source_sg = module.web_server.ssh_access_sg_id
 }
