@@ -42,7 +42,7 @@ apt update
 apt install -y nginx
 systemctl start nginx
 systemctl enable nginx
-echo "<h1>This EC2 instance was deployed with a Terraform module!</h1>" >> /var/www/html/index.html
+echo "<h1>This EC2 instance was deployed with a Terraform module!</h1>" > /var/www/html/index.html
 EOF
 }
 
