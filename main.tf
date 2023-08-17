@@ -13,7 +13,10 @@ module "web_server" {
   key_name          = "kriskey"
   user_data_file    = "nginx_debian.sh"
   vpc_id            = module.network.vpc_id
-  public_subnet_ids = [module.network.public_subnet1_id, module.network.public_subnet2_id]
+  public_subnet_ids = [
+    module.network.public_subnet1_id, 
+    module.network.public_subnet2_id
+  ]
   my_ip             = "24.162.52.74/32"
 }
 
