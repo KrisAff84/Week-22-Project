@@ -53,7 +53,7 @@ EOF
 
 
 resource "aws_instance" "web" {
-  count         = length(var.public_subnet_ids) > 1 ? length(var.public_subnet_ids) : 1
+  count         = length(var.public_subnet_ids)
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = var.key_name
