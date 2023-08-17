@@ -27,19 +27,19 @@ module "network" {
   name_prefix = local.name_prefix
 }
 
-# module "database" {
-#   source = "./modules/rds_db"
-#   region = local.region
-#   name_prefix = local.name_prefix
-#   vpc_id = module.network.vpc_id
-#   db_subnet_ids = [
-#     module.network.private_subnet1_id,
-#     module.network.private_subnet2_id
-#   ]
-#   username            = "kris"
-#   password            = var.secret_password
-#   db_access_source_sg = module.web_server.ssh_access_sg_id
-# }
+module "database" {
+  source = "./modules/rds_db"
+  region = local.region
+  name_prefix = local.name_prefix
+  vpc_id = module.network.vpc_id
+  db_subnet_ids = [
+    module.network.private_subnet1_id,
+    module.network.private_subnet2_id
+  ]
+  username            = "kris"
+  password            = var.secret_password
+  db_access_source_sg = module.web_server.ssh_access_sg_id
+}
 
 
 output "server_availability_zones" {
@@ -54,6 +54,6 @@ output "lb_dns" {
 output "ami" {
   value = module.web_server.ami
 }
-# output "db_address" {
-#   value = module.database.db_address
-# }
+output "db_address" {
+  value = module.database.db_address
+}
