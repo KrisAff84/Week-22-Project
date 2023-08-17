@@ -18,7 +18,9 @@ variable "name_prefix" {
 variable "public_subnet_ids" {
   description = "List of public subnet IDs to deploy instances to"
   type        = list(string)
-  default     = [""]
+  default = [
+    ""
+  ]
 }
 variable "ami" {
   type = string
