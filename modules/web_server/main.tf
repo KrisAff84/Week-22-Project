@@ -33,7 +33,7 @@ data "aws_subnets" "public" {
 #####################################
 
 locals {
-  public_subnet_ids = var.public_subnet_ids != [""] ? var.public_subnet_ids : [data.aws_subnets.public.ids[0]]
+  public_subnet_ids = var.public_subnet_ids[0] != "" ? var.public_subnet_ids : [data.aws_subnets.public.ids[0]]
   vpc_id            = var.vpc_id != "" ? var.vpc_id : (data.aws_vpc.default.id)
   load_balancer     = length(var.public_subnet_ids) > 1 ? 1 : 0
   default_user_data = <<-EOF
