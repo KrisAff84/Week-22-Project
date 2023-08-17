@@ -8,12 +8,12 @@ module "web_server" {
 
   region            = local.region
   name_prefix       = local.name_prefix
-  public_subnet_ids = [module.network.public_subnet1_id, module.network.public_subnet2_id]
   ami               = "ami-03f65b8614a860c29"
   instance_type     = "t2.micro"
   key_name          = "kriskey"
   user_data_file    = "nginx_debian.sh"
   vpc_id            = module.network.vpc_id
+  public_subnet_ids = [module.network.public_subnet1_id, module.network.public_subnet2_id]
   my_ip             = "24.162.52.74/32"
 }
 
