@@ -1,11 +1,13 @@
 locals {
   region = "us-west-2"
+  name_prefix = "tf-test"
 }
 
 module "web_server" {
   source = "./modules/web_server"
 
   region            = local.region
+  name_prefix       = local.name_prefix
   public_subnet_ids = [module.network.public_subnet1_id, module.network.public_subnet2_id]
   ami               = "ami-03f65b8614a860c29"
   instance_type     = "t2.micro"
@@ -14,14 +16,18 @@ module "web_server" {
   vpc_id            = module.network.vpc_id
   my_ip             = "24.162.52.74/32"
 }
+
 module "network" {
   source = "./modules/2_tier_network"
 
   region = local.region
+  name_prefix = local.name_prefix
 }
+
 module "database" {
   source = "./modules/rds_db"
   region = local.region
+  name_prefix = local.name_prefix
   vpc_id = module.network.vpc_id
   db_subnet_ids = [
     module.network.private_subnet1_id,
